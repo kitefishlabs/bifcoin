@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+<h1>User Dashboard</h1>
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff %}
+<p>Logged in as {{ user.username }} (admin).</p>
+{% elif user.is_authenticated %}
+<p>Logged in as {{ user.username }}.</p>
+{% else %}
+<p>You must <a href="/user/register/">register</a> to participate in BifCoin.</p>
+{% endif %}
+{% endblock %}

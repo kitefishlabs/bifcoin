@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="style.css">
+  <title>{% block title %}BifCoin{% endblock %}</title>
+</head>
+
+<body>
+  <div id="sidebar">
+    {% block sidebar %}
+    <ul>
+      <li><a href="/">Explorer</a></li>
+      {% if user.is_authenticated %}
+      <li><a href="/user">User Dashboard</a></li>
+      <li><a href="/user/password_reset">Reset Password</a></li>
+      <li><a href="/user/logout">Log Out</a></li>
+      {% else %}
+      <li><a href="/user/register">Register</a></li>
+      <li><a href="/user/login">Log In</a></li>
+      {% endif %}
+    </ul>
+    {% endblock %}
+  </div>
+
+  <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</html>

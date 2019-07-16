@@ -41,14 +41,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'blockchain.apps.BlockchainConfig',
-    'user.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'blockchain.apps.BlockchainConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.EmailUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

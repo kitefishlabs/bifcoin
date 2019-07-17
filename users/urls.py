@@ -20,4 +20,6 @@ urlpatterns = [
          views.claim_proposals, name='claim'),
     path('unclaim/proposals',
          views.unclaim_proposals, name='unclaim'),
+    # path('proposal/<int:proposal_id>',
+    #      views.proposal_detail, name='proposal-detail'),
 ]

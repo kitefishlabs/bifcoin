@@ -15,22 +15,23 @@ class RegistrationView(CreateView):
 
 
 def dashboard(request):
-    user = request.user
+    user = BifCoinUser.objects.get(proposal_email=request.user.email)
     linked_email = ''
     claimable = False
     claimed = False
-    possible_bifcoin_users = BifCoinUser.objects.filter(
-        proposal_email=user.email)
-    if (len(possible_bifcoin_users) == 1) and (possible_bifcoin_users[0].state == 'claimed'):
-        linked_email = possible_bifcoin_users[0].proposal_email
-        claimed = True
-    elif (len(possible_bifcoin_users) == 1):
-        linked_email = possible_bifcoin_users[0].proposal_email
-        claimable = True
-    else:
-        pass
-    proposals = ClaimedProposal.objects.filter(proposal_email=user.email)
-    return render(request, 'user/dashboard.html', {'claimable': claimable, 'claimed': claimed, 'linked_email': linked_email, 'linked_proposals': list(proposals), })
+    proposals = []
+
+    if (user is not None):
+        linked_email = user.proposal_email
+        if (user.state == 'claimed'):
+            claimed = True
+        else:
+            claimable = True
+
+        proposals = ClaimedProposal.objects.filter(
+            proposal_email=user.proposal_email).order_by('proposal_datetime')
+
+    return render(request, 'user/dashboard.html', {'claimable': claimable, 'claimed': claimed, 'linked_email': linked_email, 'linked_proposals': list(proposals), 'bifuser': user})
 
 
 def claim_proposals(request):
@@ -44,9 +45,14 @@ def claim_proposals(request):
             user = possible_bifcoin_users[0]
             user.state = 'claimed'
             user.save()
+            balance = user.balance
             for proposal in proposals:
                 proposal.state = 'claimed'
+                proposal.owner = possible_bifcoin_users[0]
+                balance += 10
                 proposal.save()
+            user.balance = balance
+            user.save()
 
     return HttpResponseRedirect('/user')
 
@@ -62,8 +68,13 @@ def unclaim_proposals(request):
             user = possible_bifcoin_users[0]
             user.state = 'unclaimed'
             user.save()
+            balance = user.balance
             for proposal in proposals:
                 proposal.state = 'unclaimed'
+                proposal.owner = None
+                balance -= 10
                 proposal.save()
+            user.balance = balance
+            user.save()
 
     return HttpResponseRedirect('/user')

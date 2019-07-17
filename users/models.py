@@ -40,7 +40,7 @@ class BifCoinUser(models.Model):
     state = models.CharField(max_length=9, choices=STATE_CHOICES)
 
     def __str__(self):
-        return (self.proposal_email + '|' + self.state + '|' + self.balance)
+        return (self.proposal_email + '|' + self.state + '|' + str(self.balance))
 
 
 class ClaimedProposal(models.Model):

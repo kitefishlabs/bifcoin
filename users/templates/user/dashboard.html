@@ -10,4 +10,24 @@
 {% else %}
 <p>You must <a href="/user/register">register</a> to participate in BifCoin.</p>
 {% endif %}
+{% if claimable %}
+<p>CLAIMABLE for {{ linked_email }}:</p>
+<form action="/user/claim/proposals" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Claim these.">
+</form>
+{% elif claimed %}
+<p>CLAIMED: You have claimed {{ linked_email }}. Your linked proposals are below.</p>
+<form action="/user/unclaim/proposals" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Un-claim these.">
+</form>
+{% endif %}
+
+<p>Linked proposals ({{ linked_proposals|length }}).</p>
+<ul>
+  {% for proposal in linked_proposals %}
+  <li>{{proposal.proposal_name}}</li>
+  {% endfor %}
+</ul>
 {% endblock %}

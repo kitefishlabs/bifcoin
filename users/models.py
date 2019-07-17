@@ -39,6 +39,9 @@ class BifCoinUser(models.Model):
     balance = models.IntegerField()
     state = models.CharField(max_length=9, choices=STATE_CHOICES)
 
+    def __str__(self):
+        return (self.proposal_email + '|' + self.state + '|' + self.balance)
+
 
 class ClaimedProposal(models.Model):
     """
@@ -49,13 +52,16 @@ class ClaimedProposal(models.Model):
     if cancelled, this should cause any transactions to be reversed
     """
     owner = models.ForeignKey(
-        BifCoinUser, on_delete=models.SET_NULL, null=True)
+        BifCoinUser, on_delete=models.SET_NULL, null=True, blank=True)
     proposal_id = models.IntegerField()
     proposal_name = models.CharField(max_length=100)
     proposal_datetime = models.DateTimeField()
     proposal_email = models.EmailField(max_length=100, null=True)
     state = models.CharField(max_length=9, choices=STATE_CHOICES)
     cancelled = models.BooleanField()
+
+    def __str__(self):
+        return (self.proposal_name + '|' + self.proposal_datetime.strftime("%Y-%m-%d %H:%M"))
 
 
 # credits

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import EmailUserCreationForm, EmailUserChangeForm
-from .models import EmailUser
+from .models import EmailUser, BifCoinUser, ClaimedProposal
 
 
 class EmailUserAdmin(UserAdmin):
@@ -25,4 +25,14 @@ class EmailUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+class BifCoinUserAdmin(admin.ModelAdmin):
+    pass
+
+
+class ClaimedProposalAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(EmailUser, EmailUserAdmin)
+admin.site.register(BifCoinUser, BifCoinUserAdmin)
+admin.site.register(ClaimedProposal, ClaimedProposalAdmin)

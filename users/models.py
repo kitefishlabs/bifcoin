@@ -64,13 +64,9 @@ class ClaimedProposal(models.Model):
         return (self.proposal_name + '|' + self.proposal_datetime.strftime("%Y-%m-%d %H:%M"))
 
 
-# credits
-class EarnedCoins(models.Model):
-    """
-    scraper/scheduler to user; based on set of actions (post to facebook from this site, etc.)
-    """
-    recipient = models.ManyToManyField(BifCoinUser)
-    timestamp = models.DateTimeField(auto_now_add=True)
+class BifUserAction(models.Model):
+    actor = models.ForeignKey(
+        BifCoinUser, on_delete=models.SET_NULL, null=True, related_name='user_action')
     ACTION_CHOICES = [
         ('social media', 'social'),
         ('note', 'note'),
@@ -78,30 +74,3 @@ class EarnedCoins(models.Model):
     ]
     action = models.CharField(max_length=12, choices=ACTION_CHOICES)
     action_payload = models.TextField()  # text or social media
-    amount = models.IntegerField()
-
-
-# deductions
-class GiftedCoins(models.Model):
-    """
-    Donations user to user
-    """
-    sender = models.ManyToManyField(BifCoinUser, related_name='gifted_coins')
-    recipient = models.ManyToManyField(BifCoinUser)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    amount = models.IntegerField()
-
-
-class SpentCoins(models.Model):
-    """
-    user to festival, receive random poetry, ascii art?
-    """
-    sender = models.ManyToManyField(BifCoinUser, related_name='spent_coins')
-    timestamp = models.DateTimeField(auto_now_add=True)
-    ART_CHOICES = [
-        ('random poetry', 'poetry'),
-        ('random ascii art', 'art'),
-    ]
-    art = models.CharField(max_length=15, choices=ART_CHOICES)
-    art_payload = models.TextField()  # text or social media
-    amount = models.IntegerField()

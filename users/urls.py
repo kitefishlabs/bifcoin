@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 
 from . import views
 
+# app_name = 'users'
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('register', views.RegistrationView.as_view(), name='register'),
@@ -20,6 +21,7 @@ urlpatterns = [
          views.claim_proposals, name='claim'),
     path('unclaim/proposals',
          views.unclaim_proposals, name='unclaim'),
+
     # path('proposal/<int:proposal_id>',
     #      views.proposal_detail, name='proposal-detail'),
 ]

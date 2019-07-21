@@ -10,6 +10,7 @@ class MinedTransaction(models.Model):
     proposal = models.OneToOneField(
         ClaimedProposal, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    verified = models.DateTimeField(auto_now_add=True)
     pending = models.BooleanField()
 
     def __str__(self):
@@ -27,6 +28,7 @@ class BifTransaction(models.Model):
         BifCoinUser, on_delete=models.SET_NULL, null=True, related_name='transactions_received')
     amount = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    verified = models.DateTimeField(auto_now_add=True)
     pending = models.BooleanField()
 
     def __str__(self):
@@ -39,6 +41,7 @@ class EarnedTransaction(models.Model):
     amount = models.IntegerField()
     action = models.OneToOneField(to=BifUserAction, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    verified = models.DateTimeField(auto_now_add=True)
     pending = models.BooleanField()
 
     def __str__(self):
@@ -54,7 +57,8 @@ class EarnedTransaction(models.Model):
 
 
 class NetworkStateLog(models.Model):
-    last_network_update = models.DateTimeField()
+    last_network_update = models.DateTimeField(auto_now_add=True)
+    approved_transactions = models.IntegerField()
     mining_reward = models.IntegerField(default=10)
     social_reward = models.IntegerField(default=1)
     note_reward = models.IntegerField(default=3)

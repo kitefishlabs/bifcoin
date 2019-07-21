@@ -2,7 +2,53 @@
 
 {% block content %}
 <h1>BifCoin Blockchain Explorer</h1>
-<p><a href="/blockchain/transactions">All transactions</a></p>
-<!-- <p><a href="/blockchain/transactions/pending">Recent pending transactions</a></p> -->
-<p><a href="/blockchain/transactions/mined">Recent mined transactions</a></p>
+<h2>Network State</h2>
+{% if network_state_log_list %}
+<ul>
+    {% for net_state in network_state_log_list %}
+    <li>
+        <p>Last Update: {{net_state.last_network_update}}</p>
+        <p>Num. Approved since previous update: {{net_state.approved_transactions}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No transactions have been approved.</p>
+{% endif %}
+<h2>P2P Transactions</h2>
+{% if bif_transactions %}
+<ul>
+    {% for transaction in bif_transactions %}
+    <p>{{transaction.sender.id}} - {{transaction.recipient.id}} - {{transaction.amount}}</p>
+    <p>Sent: {{transaction.timestamp}}</p>
+    {% endfor %}
+</ul>
+<p><a href="/blockchain/transactions">Recent P2P Transactions</a></p>
+{% else %}
+<p>There are no P2P Transactions</p>
+{% endif %}
+<h2>Mined Transactions</h2>
+{% if mined_transactions %}
+<ul>
+    {% for transaction in mined_transactions %}
+    <p>{{transaction.sender.id}} - {{transaction.recipient.id}} - {{transaction.amount}}</p>
+    <p>Sent: {{transaction.timestamp}}</p>
+    {% endfor %}
+</ul>
+<p><a href="/blockchain/transactions/mined">Recent Mined Transactions</a></p>
+{% else %}
+<p>There are no Mined Transactions</p>
+{% endif %}
+<h2>Earned Transactions</h2>
+{% if earned_transactions %}
+<ul>
+    {% for transaction in earned_transactions %}
+    <p>{{transaction.sender.id}} - {{transaction.recipient.id}} - {{transaction.amount}}</p>
+    <p>Sent: {{transaction.timestamp}}</p>
+    {% endfor %}
+</ul>
+<p><a href="/blockchain/transactions/earned">Recent Earned Transactions</a></p>
+{% else %}
+<p>There are no Earned Transactions</p>
+{% endif %}
 {% endblock %}

@@ -46,13 +46,10 @@ def claim_proposals(request):
             user = possible_bifcoin_users[0]
             user.state = 'claimed'
             user.save()
-            balance = user.balance
             for proposal in proposals:
                 proposal.state = 'claimed'
                 proposal.owner = possible_bifcoin_users[0]
-                balance += 10
                 proposal.save()
-            user.balance = balance
             user.save()
 
     return HttpResponseRedirect('/user')
@@ -69,13 +66,10 @@ def unclaim_proposals(request):
             user = possible_bifcoin_users[0]
             user.state = 'unclaimed'
             user.save()
-            balance = user.balance
             for proposal in proposals:
                 proposal.state = 'unclaimed'
                 proposal.owner = None
-                balance -= 10
                 proposal.save()
-            user.balance = balance
             user.save()
 
     return HttpResponseRedirect('/user')

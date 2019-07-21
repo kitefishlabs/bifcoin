@@ -42,7 +42,7 @@ class EarnedTransaction(models.Model):
     pending = models.BooleanField()
 
     def __str__(self):
-        return ' - '.join([self.timestamp.strftime("%Y-%m-%d %H:%M"), str(self.amount), self.sender, self.recipient, str(self.pending)])
+        return ' - '.join([self.timestamp.strftime("%Y-%m-%d %H:%M"), str(self.amount), self.recipient.user.email, self.action.action, str(self.pending)])
 
 
 #     ART_CHOICES = [

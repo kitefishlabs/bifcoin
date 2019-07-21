@@ -15,7 +15,8 @@ class RegistrationView(CreateView):
 
 
 def dashboard(request):
-    user = BifCoinUser.objects.get(proposal_email=request.user.email)
+    user = BifCoinUser.objects.get(
+        proposal_email=request.user.email)
     linked_email = ''
     claimable = False
     claimed = False

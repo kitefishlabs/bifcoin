@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if bif_transactions_list %}
+<h2>Transactions ({{ bif_transactions_list|length }})</h2>
+<ul>
+    {% for transaction in bif_transactions_list %}
+    <li>
+        <p>{{transaction.sender.id}} - {{transaction.recipient.id}} - {{transaction.amount}}</p>
+        <p>Mined on: {{transaction.timestamp}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if mined_transactions_list %}
+<h2>Mined Transactions ({{ mined_transactions_list|length }})</h2>
+<ul>
+    {% for transaction in mined_transactions_list %}
+    <li>
+        <p>{{transaction.proposal.proposal_name}} - {{transaction.proposal.proposal_id}} - {{transaction.amount}}</p>
+        <p>Mined on: {{transaction.timestamp}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% if earned_transactions_list %}
+<h2>Mined Transactions ({{ earned_transactions_list|length }})</h2>
+<ul>
+    {% for transaction in earned_transactions_list %}
+    <li>
+        <p>{{transaction.proposal.proposal_name}} - {{transaction.proposal.proposal_id}} - {{transaction.amount}}</p>
+        <p>Earned on: {{transaction.timestamp}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

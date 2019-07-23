@@ -5,10 +5,10 @@ from users.models import BifCoinUser, ClaimedProposal, BifUserAction
 
 class MinedTransaction(models.Model):
     recipient = models.ForeignKey(
-        BifCoinUser, on_delete=models.SET_NULL, null=True, related_name='transactions_mined')
+        BifCoinUser, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField()
     proposal = models.OneToOneField(
-        ClaimedProposal, on_delete=models.CASCADE)
+        ClaimedProposal, on_delete=models.CASCADE, related_name='mined_transaction')
     timestamp = models.DateTimeField(auto_now_add=True)
     verified = models.DateTimeField(auto_now_add=True)
     pending = models.BooleanField()
@@ -57,9 +57,10 @@ class EarnedTransaction(models.Model):
 
 
 class NetworkStateLog(models.Model):
-    last_network_update = models.DateTimeField(auto_now_add=True)
-    approved_transactions = models.IntegerField()
-    mining_reward = models.IntegerField(default=10)
+    last_network_update = models.DateTimeField()
+    approved_transactions = models.IntegerField(default=0)
+    mining_reward = models.IntegerField(default=11)
+    installation_mining_reward = models.IntegerField(default=1)
     social_reward = models.IntegerField(default=1)
     note_reward = models.IntegerField(default=3)
     feedback_reward = models.IntegerField(default=2)

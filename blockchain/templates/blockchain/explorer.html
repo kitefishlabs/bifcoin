@@ -7,14 +7,27 @@
 <ul>
     {% for net_state in network_state_log_list %}
     <li>
-        <p>Last Update: {{net_state.last_network_update}}</p>
-        <p>Num. Approved since previous update: {{net_state.approved_transactions}}</p>
+        <p>Last Update: {{net_state.last_network_update}} - (Approved since previous update:
+            {{net_state.approved_transactions}})</p>
     </li>
     {% endfor %}
 </ul>
 {% else %}
 <p>No transactions have been approved.</p>
 {% endif %}
+
+{% if user.is_authenticated and user.is_staff %}
+<h2>Admin Actions</h2>
+<form action="/blockchain/tick/forward" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Process transactions">
+</form>
+<form action="/blockchain/mine/forward" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Mine transactions">
+</form>
+{% endif %}
+
 <h2>P2P Transactions</h2>
 {% if bif_transactions %}
 <ul>

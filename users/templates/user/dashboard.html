@@ -22,7 +22,7 @@
 <p>You have claimed {{ linked_email }}. Your linked proposals are below.</p>
 <form action="/user/unclaim/proposals" method="post">
   {% csrf_token %}
-  <input type="submit" value="Un-claim these.">
+  <input type="submit" value="Un-claim these">
 </form>
 {% endif %}
 

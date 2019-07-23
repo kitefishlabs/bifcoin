@@ -37,6 +37,8 @@ class BifCoinUser(models.Model):
         EmailUser, on_delete=models.SET_NULL, null=True)
     proposal_email = models.EmailField(max_length=100, null=True, unique=True)
     balance = models.IntegerField()
+    # pending bal. can be negative
+    pending_balance = models.IntegerField()
     state = models.CharField(max_length=9, choices=STATE_CHOICES)
 
     def __str__(self):

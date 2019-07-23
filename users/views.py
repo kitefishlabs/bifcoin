@@ -46,12 +46,11 @@ def claim_proposals(request):
             user = possible_bifcoin_users[0]
             user.state = 'claimed'
             user.save()
+            # flip each proposal's state to claimed
             for proposal in proposals:
                 proposal.state = 'claimed'
                 proposal.owner = possible_bifcoin_users[0]
                 proposal.save()
-            user.save()
-
     return HttpResponseRedirect('/user')
 
 

@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'blockchain.apps.BlockchainConfig',
     'users.apps.UsersConfig',
 ]
@@ -123,7 +122,7 @@ AUTH_USER_MODEL = 'users.EmailUser'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Toronto'
 
 USE_I18N = True
 

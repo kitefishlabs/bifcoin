@@ -19,6 +19,9 @@
     <li>
         <p>{{transaction.proposal.proposal_name}} - {{transaction.proposal.proposal_id}} - {{transaction.amount}}</p>
         <p>Mined: {{transaction.timestamp}}</p>
+        {% if transaction.pending is False %}
+        <p>Verified: {{transaction.verified}} </p>
+        {% endif %}
     </li>
     {% endfor %}
 </ul>

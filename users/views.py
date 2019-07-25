@@ -15,8 +15,11 @@ class RegistrationView(CreateView):
 
 
 def dashboard(request):
-    user = BifCoinUser.objects.get(
-        proposal_email=request.user.email)
+    try:
+        user = BifCoinUser.objects.get(proposal_email=request.user.email)
+    except BifCoinUser.DoesNotExist:
+        user = BifCoinUser(user=request.user, proposal_email=request.user.email,
+                           balance=0, pending_balance=0, state='claimed')
     linked_email = ''
     claimable = False
     claimed = False

@@ -21,6 +21,12 @@ urlpatterns = [
     path('transactions/<int:pk>', views.TransactionDetailView.as_view(),
          name='transaction-detail'),
 
+    path('transaction/send>', views.transaction_send_view,
+         name='transaction_send'),
+    path('transaction/send/<int:proposal_id>', views.transaction_send,
+         name='transaction_send'),
+    # path('transaction/earn', views.TransactionEarnView.as_view(), name='transaction_earn'),
+
     path('network/log', views.NetworkStateLogView.as_view(),
          name='network-state'),
 ]

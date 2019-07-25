@@ -7,7 +7,7 @@ from django.views import generic
 import datetime
 
 from .models import MinedTransaction, BifTransaction, EarnedTransaction, NetworkStateLog
-from users.models import ClaimedProposal
+from users.models import BifCoinUser, ClaimedProposal
 
 
 def explorer(request):
@@ -66,6 +66,29 @@ class NetworkStateLogView(generic.ListView):
 
     def get_queryset(self):
         return NetworkStateLog.objects.order_by('-last_network_update')
+
+
+def transaction_send_view(request):
+
+    all_claimed_proposals = ClaimedProposal.objects.all()
+    claimed_set = set(
+        [(proposal.proposal_id, proposal.proposal_name) for proposal in all_claimed_proposals])
+    deduped = sorted(list(claimed_set), key=lambda ttl: ttl[1].lower())
+    return render(request, 'blockchain/transaction-send.html', {'all_proposals': deduped})
+
+
+def transaction_send(request, proposal_id):
+    quant = int(request.POST['quantity'])
+    if request.method == 'POST' and quant > 0:
+        proposal = ClaimedProposal.objects.get(proposal_id=proposal_id)
+        sender = BifCoinUser.objects.get(proposal_email=request.user.email)
+        receiver = BifCoinUser.objects.get(
+            proposal_email=proposal.proposal_email)
+        # network_state = NetworkStateLog.objects.order_by('-last_network_update')
+        transaction = BifTransaction(
+            sender=sender, recipient=receiver, amount=quant, pending=True)
+        transaction.save()
+    return HttpResponseRedirect('/blockchain/explorer')
 
 
 def mine_forward(request):

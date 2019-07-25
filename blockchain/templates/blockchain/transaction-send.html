@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<ul>
+    {% for proposal in all_proposals %}
+    <li>
+        <form action="/blockchain/transaction/send/{{proposal.0}}" method="post">
+            {% csrf_token %}
+            <p>Send to {{proposal.1}}</p>
+            <p>Amount to send:</p>
+            <input type="number" name="quantity" min="1" max="3">
+            <input type="submit" value="Send">
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

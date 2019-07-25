@@ -35,8 +35,12 @@
 
 <h2>Earned BifCoin</h2>
 
-<h2>Gifted BifCoin</h2>
-
+<h2>Gifted/P2P BifCoin</h2>
+<p><a href="/blockchain/transaction/send">Give BifCoin</a></p>
+{% for transaction in bif_transactions %}
+<p>{{transaction.sender.id}} - {{transaction.recipient.id}} - {{transaction.amount}}</p>
+<p>Sent: {{transaction.timestamp}}</p>
+{% endfor %}
 <h2>Mined BifCoin</h2>
 
 <h2>Your balance</h2>

@@ -78,13 +78,12 @@ def transaction_send_view(request):
 
 
 def transaction_send(request, proposal_id):
-    quant = int(request.POST['quantity'])
+    quant = int(request.POST['p2p_quantity'])
     if request.method == 'POST' and quant > 0:
         proposal = ClaimedProposal.objects.get(proposal_id=proposal_id)
         sender = BifCoinUser.objects.get(proposal_email=request.user.email)
         receiver = BifCoinUser.objects.get(
             proposal_email=proposal.proposal_email)
-        # network_state = NetworkStateLog.objects.order_by('-last_network_update')
         transaction = BifTransaction(
             sender=sender, recipient=receiver, amount=quant, pending=True)
         transaction.save()
@@ -112,11 +111,16 @@ def mine_forward(request):
                 proposal_datetime__lte=time_now).filter(mined_transaction=None)
             mining_reward = last_network_state.mining_reward
             for proposal in ready_to_mine:
+                print("-->")
+                link = proposal.proposal_email
+                bc_recipient = BifCoinUser.objects.get(
+                    proposal_email=proposal.proposal_email)
                 if proposal.proposal_datetime.hour == 6:
                     mining_reward = last_network_state.installation_reward
-                mined = MinedTransaction(
-                    recipient=proposal.owner, amount=mining_reward, proposal=proposal, pending=True)
-                mined.save()
+                if bc_recipient is not None:
+                    mined = MinedTransaction(
+                        recipient=bc_recipient, amount=mining_reward,     proposal=proposal, pending=True)
+                    mined.save()
     # TODO: add feedback message
     return HttpResponseRedirect('/blockchain/explorer')
 
@@ -128,6 +132,18 @@ def tick_forward(request):
     # - do nothing if it is not
     if (last_update.last_network_update < time_now) and request.method == 'POST':
         # gather the transactions that are now earlier than the current time and pending
+        pending_mined = MinedTransaction.objects.filter(
+            timestamp__lte=time_now).exclude(pending=False)
+        # subtract the pending amounts from each referenced user's pending balance
+        for transaction in pending_mined:
+            amount = transaction.amount
+            transaction.recipient.pending_balance -= amount
+            transaction.recipient.balance += amount
+            transaction.recipient.save()
+            # mark them as no longer pending and bump the verified timestamp
+            transaction.pending = False
+            transaction.verified = timezone.now()
+            transaction.save()
         pending_bifs = BifTransaction.objects.filter(
             timestamp__lte=time_now).exclude(pending=False)
         # subtract the pending amounts from each referenced user's pending balance
@@ -137,19 +153,6 @@ def tick_forward(request):
             transaction.recipient.pending_balance -= amount
             transaction.recipient.balance += amount
             transaction.sender.save()
-            transaction.recipient.save()
-            # mark them as no longer pending and bump the verified timestamp
-            transaction.pending = False
-            transaction.verified = timezone.now()
-            transaction.save()
-
-        pending_mined = MinedTransaction.objects.filter(
-            timestamp__lte=time_now).exclude(pending=False)
-        # subtract the pending amounts from each referenced user's pending balance
-        for transaction in pending_mined:
-            amount = transaction.amount
-            transaction.recipient.pending_balance -= amount
-            transaction.recipient.balance += amount
             transaction.recipient.save()
             # mark them as no longer pending and bump the verified timestamp
             transaction.pending = False

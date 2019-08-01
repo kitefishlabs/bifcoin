@@ -2,18 +2,27 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<ul>
-    {% for proposal in all_proposals %}
-    <li>
-        <form action="/blockchain/transaction/send/{{proposal.0}}" method="post">
-            {% csrf_token %}
-            <p>Send to {{proposal.1}}</p>
-            <p>Amount to send:</p>
-            <input type="number" name="quantity" min="1" max="3">
-            <input type="submit" value="Send">
-        </form>
-    </li>
-    {% endfor %}
+
+<p>{{all_proposals|length}}</p>
+<div class="dropdown">
+    <button onclick="proposalsDropdownFunction()" class="dropbtn">Dropdown</button>
+    <div id="proposalsDropdown" class="dropdown-content">
+        <input type="text" placeholder="Search..." id="proposalInput" onkeyup="filterFunction()">
+        {% for proposal in all_proposals %}
+        <!-- <a href="/blockchain/transaction/send/{{proposal.0}}">{{proposal.1}}</a> -->
+        <span id="{{proposal.0}}_choice">{{proposal.1}}</span>
+        {% endfor %}
+    </div>
+</div>
+<form action="/blockchain/transaction/send/{{proposal.0}}" method="post">
+    {% csrf_token %}
+    <!-- <input type="hidden" name="proposal_id"> -->
+    <p>Amount to send:</p>
+    <input type="number" name="quantity" min="1" max="3">
+    <input type="submit" value="Send">
+</form>
+</li>
+
 </ul>
 {% endif %}
 {% endblock %}
